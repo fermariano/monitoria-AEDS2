@@ -1,7 +1,8 @@
 public class AlgebraBool {
 
+    // Método para converter uma string em um array de booleanos
     static boolean[] GetBoolMap(String frase) {
-        int tamanho = Integer.parseInt(String.valueOf(frase.charAt(0))); // primerio caracter é o numero de variaveis
+        int tamanho = Integer.parseInt(String.valueOf(frase.charAt(0))); // O primeiro caractere é o número de variáveis
         
         boolean[] arraybool = new boolean[tamanho];
         int count = 0;
@@ -24,42 +25,42 @@ public class AlgebraBool {
             if (igual_0(frase)) {
                 break;
             }
-            arraybool = GetBoolMap(frase); // retorna um array bool com quantos elementos logicos terão e o valor
-                                           // deles em bool ex(a,b,c) se é true ou false;
-            frase = GetOperators(frase, arraybool); // retorna nova String com os operadores substituidos por simbolos
-            // para facilitar leitura and = ^, or = V, not = !
+            arraybool = GetBoolMap(frase); // Retorna um array bool com quantos elementos lógicos terão e o valor
+                                           // deles em bool (ex: (a,b,c) se é true ou false)
+            frase = GetOperators(frase, arraybool); // Retorna nova String com os operadores substituídos por símbolos
+            // para facilitar a leitura: and = ^, or = V, not = !
 
-            frase = CalculateBooleanExpresion(frase); // retorna a frase com as operaçoes logicas resolvidas
+            frase = CalculateBooleanExpresion(frase); // Retorna a frase com as operações lógicas resolvidas
             MyIO.println(frase);
 
         }
 
     }
 
-    // intermediario das funçoes logicas
+    // Função intermediária para calcular a expressão booleana
     public static String CalculateBooleanExpresion(String frase) {
-        // preparando para chamar a funçao And
+        // Preparando para chamar a função And
         int operadores = 0;
 
-        for (int i = 0; i < frase.length(); i++) { // loop para contar quantos operadores tem na frase
+        for (int i = 0; i < frase.length(); i++) { // Loop para contar quantos operadores tem na frase
             if (frase.charAt(i) == '^' || frase.charAt(i) == 'V' || frase.charAt(i) == '!') {
                 operadores++;
             }
         }
 
-        int[] OperatorsIndex = new int[operadores];// criando array para guardar as posiçoes dos operadores
-        int index = 0; // criando Index para guardar a posiçao dos operadores
+        int[] OperatorsIndex = new int[operadores]; // Criando array para guardar as posições dos operadores
+        int index = 0; // Criando Index para guardar a posição dos operadores
 
-        for (int i = frase.length() - 1; i >= 0; i--) { // loop para guardar a posisao dos operadores em index de tras
-                                                        // para frente para a ordem de resoluçao de operaçoes
+        for (int i = frase.length() - 1; i >= 0; i--) { // Loop para guardar a posição dos operadores em index de trás
+                                                        // para frente para a ordem de resolução de operações
             if (frase.charAt(i) == '^' || frase.charAt(i) == 'V' || frase.charAt(i) == '!') {
                 OperatorsIndex[index] = i;
                 index++;
             }
         }
 
-        for (int i : OperatorsIndex) { // loop para chamar as funçoes logicas de acordo com a ordem de resoluçao de
-                                       // operaçoes (tras para frente)
+        for (int i : OperatorsIndex) { // Loop para chamar as funções lógicas de acordo com a ordem de resolução de
+                                       // operações (trás para frente)
             if (frase.charAt(i) == '^') {
                 frase = andElement(frase, i);
             } else if (frase.charAt(i) == 'V') {
@@ -73,8 +74,7 @@ public class AlgebraBool {
         return frase;
     }
 
-    // faz a operação lógica not, and, or;
-
+    // Função para a operação lógica AND
     public static String andElement(String frase, int index) {
         StringBuilder newFrase = new StringBuilder();
         int i = 0;
@@ -112,6 +112,7 @@ public class AlgebraBool {
     }
     
 
+    // Função para a operação lógica NOT
     public static String notElementSingle(String frase, int index) {
         StringBuilder newFrase = new StringBuilder();
         int i = 0;
@@ -126,9 +127,9 @@ public class AlgebraBool {
                     char c = frase.charAt(index);
                     if (Character.isDigit(c)) {
                         count++;
-                        newFrase.append(c == '1' ? '0' : '1'); // troca as entradas invertendo-as
+                        newFrase.append(c == '1' ? '0' : '1'); // Troca as entradas invertendo-as
                     }
-                    index++; // atualiza o índice
+                    index++; // Atualiza o índice
                 }
     
                 i += count + 3; // Pula os dígitos e os parênteses
@@ -142,6 +143,7 @@ public class AlgebraBool {
     }
     
 
+    // Função para a operação lógica OR
     public static String OrElement(String frase, int index) {
         StringBuilder newFrase = new StringBuilder();
         int i = 0;
@@ -179,29 +181,25 @@ public class AlgebraBool {
     }
     
 
-    // preparando a String para leitura logica abaixo desse comentário, Que Deus
-    // perdoe essas funções malevolentes
-
-    public static String CleanString(String frase) { // um codigo que não me orgulho mas ele apenas deixa a String
-                                                     // com os caracteres essenciais tirando as informação da entrada
-                                                     // como espaços ou os numeros iniciais
+    // Função para limpar a string e deixá-la pronta para a leitura lógica
+    public static String CleanString(String frase) {
         String newfrase = "";// String resultante
-        int newindex = 0; // index da primeira Operação (inicio da String utilizavel para a logica)
+        int newindex = 0; // Index da primeira Operação (início da String utilizável para a lógica)
 
         // frase antes de limpar: 2 1 0 ^(!(1) , !(0))
-        for (int i = 0; i < frase.length(); i++) { // caminhando e apagando numeros até chegar na operação
+        for (int i = 0; i < frase.length(); i++) { // Caminhando e apagando números até chegar na operação
             if (frase.charAt(i) == 'V' || frase.charAt(i) == '!' || frase.charAt(i) == '^') {
                 newindex = i;
-                break; // saí do loop
+                break; // Saí do loop
             }
-            if (!clear(frase.charAt(i))) { // identifica se é um numero ou um espaço ou uma virgula
-                newfrase += frase.charAt(i); // adicionando caracteres a nova frase uteis
+            if (!clear(frase.charAt(i))) { // Identifica se é um número ou um espaço ou uma vírgula
+                newfrase += frase.charAt(i); // Adicionando caracteres à nova frase úteis
             }
         }
 
         for (int i = newindex; i < frase.length(); i++) {
             if (frase.charAt(i) == ' ' || frase.charAt(i) == ',')
-                continue; // ignora espaços e virgulas
+                continue; // Ignora espaços e vírgulas
             else
                 newfrase += frase.charAt(i);
         }
@@ -209,6 +207,7 @@ public class AlgebraBool {
         return newfrase;
     }
 
+    // Função para obter o valor booleano de uma expressão
     public static String getBoolValue(String frase, boolean[] arraybool) {
         String newfrase = "";
         int qtd = arraybool.length;
@@ -239,43 +238,46 @@ public class AlgebraBool {
         return newfrase;
     }
 
-    public static String GetOperators(String frase, boolean[] arraybool) { // funçõa intermediária que chama as outras
-                                                                           // funções para substituir os operadores
-                                                                           // logicos por simbolos
+    // Função intermediária para substituir os operadores lógicos por símbolos
+    public static String GetOperators(String frase, boolean[] arraybool) {
 
-        frase = equalsAnd(frase); // substitui and por ^
-        frase = equalsNot(frase); // substitui not por !
-        frase = equalsOr(frase);// substitui or por V
-        frase = (getBoolValue(frase, arraybool)); // retorna String com os termos A,B,C substituidos pelos seus
-                                                  // valores logicos.
-        frase = CleanString(frase); // remove os numeros da entrada inicial e
+        frase = equalsAnd(frase); // Substitui and por ^
+        frase = equalsNot(frase); // Substitui not por !
+        frase = equalsOr(frase);// Substitui or por V
+        frase = (getBoolValue(frase, arraybool)); // Retorna String com os termos A,B,C substituídos pelos seus
+                                                  // valores lógicos.
+        frase = CleanString(frase); // Remove os números da entrada inicial e
 
         return frase;
     }
 
-    // retorna true se for igual a not
+    // Método para substituir o operador NOT
     public static String equalsNot(String frase) {
         return frase.replace("not", "!");
     }
     
+    // Método para substituir o operador OR
     public static String equalsOr(String frase) {
         return frase.replace("or", "V");
     }
     
+    // Método para substituir o operador AND
     public static String equalsAnd(String frase) {
         return frase.replace("and", "^");
     }
     
+    // Método para verificar se a frase é igual a 0
     static boolean igual_0(String frase) {
         return frase.equals("0");
     }
     
+    // Método para limpar um caractere
     static boolean clear(char c) {
         return Character.isDigit(c) || c == ' ' || c == ',' || c == '.';
     }
 
+    // Método para verificar se é um número
     static boolean isnumber(char c) {
         return Character.isDigit(c);
     }
-    
 }
