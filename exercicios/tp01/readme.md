@@ -37,8 +37,5 @@ Sinta-se à vontade para contribuir com este projeto! Se encontrar algum bug ou 
 
 ## Autores
 
-Este programa foi desenvolvido por [Nome do Autor] e [Nome do Coautor].
+Este programa foi desenvolvido por Luis Phillip
 
-## Licença
-
-Este projeto está licenciado sob a [Licença XYZ]. Consulte o arquivo LICENSE.md para obter mais detalhes.
