@@ -6,7 +6,7 @@ Bem-vindo à página da monitoria da disciplina de Algoritmos e Estruturas de Da
 
 Algoritmos e Estruturas de Dados 2 é uma disciplina fundamental para a formação em Ciência da Computação, abordando técnicas avançadas de algoritmos e estruturas de dados. Durante o curso, os alunos estudam tópicos como:
 
-- Estruturas de dados avançadas (árvores balanceadas, tabelas hash, grafos)
+- Estruturas de dados avançadas (árvores balanceadas, tabelas hash)
 - Algoritmos de busca e ordenação eficientes
 - Análise de complexidade
 - Paradigmas de projeto de algoritmos (dividir para conquistar, programação dinâmica, algoritmos gananciosos)
