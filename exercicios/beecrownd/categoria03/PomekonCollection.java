@@ -19,7 +19,7 @@ public class PomekonCollection {
 
     public static final int pomekonsAvailable = 151;
 
-    public static int numOfnonDuplicatePomekons(String[] collection){
+    public static int numOfNonDuplicatePomekons(String[] collection){
         String[] exclusiveCollection = new String[collection.length];
         int index = 0;
         for(String pomekon : collection) {
@@ -39,7 +39,7 @@ public class PomekonCollection {
 
     public static void main(String[] args) {
         String[] allPomekonsCaptured = readPomekons();
-        int pomekonsCaught = numOfnonDuplicatePomekons(allPomekonsCaptured);
+        int pomekonsCaught = numOfNonDuplicatePomekons(allPomekonsCaptured);
         System.out.println("Falta(m) " + (pomekonsAvailable - pomekonsCaught) + " pomekon(s).");
     }
 
