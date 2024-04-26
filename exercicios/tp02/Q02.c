@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include <stdbool.h>
-#include <stdint.h>
-#include <time.h>
+
+#define INITIAL_STRING_CAPACITY 256
+#define INITIAL_ARRAY_CAPACITY 5
 
 typedef struct {
     char *id;
@@ -29,17 +29,36 @@ typedef struct {
     bool isWizard;
 } Character;
 
-
+void free_string_array(char** array, int length);
+void free_character(Character* character);
 
 char *read_string(int *i, const char *csvLine) {
     int maxSize = strlen(csvLine);
     if (*i >= maxSize) 
         return NULL; 
-    //TODO fzer logica de #define com buffer_size e se passar expande
-    char *str = (char *)malloc(maxSize * sizeof(char));
+
+    int capacity = INITIAL_STRING_CAPACITY;
+    char *str = (char *)malloc(capacity * sizeof(char));
+    if (str == NULL) {
+        perror("Memory allocation error in string");
+        return NULL;
+    }
+
     int pos = 0; 
     while (*i < maxSize && csvLine[*i] != ';') 
+    {
+        if (pos >= capacity-1) {
+            capacity *= 2;
+            char *temp = (char *)realloc(str, capacity * sizeof(char));
+            if (temp == NULL) {
+                perror("Error when resizing string");
+                free(str); 
+                return NULL;
+            }
+            str = temp;
+        }
         str[pos++] = csvLine[(*i)++];
+    }
 
     str[pos] = '\0'; 
     (*i)++;
@@ -51,22 +70,50 @@ char **read_multivalued(int *i, const char *csvLine, int *arrayCount) {
     if (*i >= maxSize-1 || csvLine[*i] != '[') 
         return NULL;
     (*i)++; // jump '['
-    char **array = (char **)malloc(10 * sizeof(char *)); 
+
+    int arrayCapacity = INITIAL_ARRAY_CAPACITY;
+    char **array = (char **)malloc(arrayCapacity * sizeof(char *)); 
     if (array == NULL) {
         perror("Memory allocation error in string array");
         return NULL;
     }
 
     int pos = 0;
-    while (*i < maxSize && csvLine[*i] != ']') {
-        char *tempStr = (char *)malloc((maxSize + 1) * sizeof(char));
+    while (*i < maxSize && csvLine[*i] != ']')
+    {
+        if (pos >= arrayCapacity) {
+            arrayCapacity *= 2; 
+            char **temp = (char **)realloc(array, arrayCapacity * sizeof(char *)); 
+            if (temp == NULL) {
+                perror("Error when resizing string array");
+                free_string_array(array, pos);
+                return NULL;
+            }
+            array = temp; 
+        }
+
+        int strCapacity = INITIAL_STRING_CAPACITY;
+        char *tempStr = (char *)malloc(strCapacity * sizeof(char));
         if (tempStr == NULL) {
             perror("Memory allocation error in string");
+            free_string_array(array, pos);
             return NULL;
         }
 
         int j = 0;
-        while (*i < maxSize && csvLine[*i] != ',' && csvLine[*i] != ']') {
+        while (*i < maxSize && csvLine[*i] != ',' && csvLine[*i] != ']')
+        {
+            if (j >= strCapacity - 1) { 
+                strCapacity *= 2;
+                char *tempStr2 = (char *)realloc(tempStr, strCapacity * sizeof(char));
+                if (tempStr2 == NULL) {
+                    perror("Memory reallocation error in string");
+                    free_string_array(array, pos);
+                    free(tempStr);
+                    return NULL;
+                }
+                tempStr = tempStr2; 
+            }
             if (csvLine[*i] != '\'') 
                 tempStr[j++] = csvLine[*i];
             
@@ -76,9 +123,8 @@ char **read_multivalued(int *i, const char *csvLine, int *arrayCount) {
         tempStr[j] = '\0'; 
         array[pos++] = tempStr;
 
-        if (csvLine[*i] == ',') {
+        if (csvLine[*i] == ',') 
             (*i)++; 
-        }
     }
     (*i) += 2; // jump ']' and ';'
     *arrayCount = pos; 
@@ -90,9 +136,8 @@ bool read_boolean(int *i, const char *csvLine) {
     char* wordRead = read_string(i, csvLine);
 
     if (wordRead != NULL) {
-        if (strcmp(wordRead, "VERDADEIRO") == 0) {
+        if (strcmp(wordRead, "VERDADEIRO") == 0)
             predicate = true;
-        }
         free(wordRead);
     }
 
@@ -192,6 +237,10 @@ void print_character(Character* character) {
 }
 
 
+
+
+
+
 int main(){
     FILE *file = fopen("C:\\Users\\thomn\\OneDrive\\Desktop\\monitoria-AEDS2\\exercicios\\tp02\\characters.csv", "r");  
     if (file == NULL) { 
@@ -209,4 +258,41 @@ int main(){
 
 
     return 0;
+}
+
+void free_string_array(char** array, int length) {
+    if (array == NULL)
+        return;
+
+    for (int i = 0; i < length; i++)
+        free(array[i]);
+    free(array);
+}
+
+void free_character(Character* character) {
+    if (character == NULL)
+        return;
+
+    free(character->id);
+    free(character->name);
+
+    if (character->alternateNames)
+        free_string_array(character->alternateNames, character->alternateNamesCount);
+
+    free(character->house);
+    free(character->ancestry);
+    free(character->species);
+    free(character->patronus);
+
+    free(character->actorName);
+    free(character->dateOfBirth);
+
+    if (character->alternateActors)
+        free_string_array(character->alternateActors, character->alternateActorsCount);
+
+    free(character->eyeColour);
+    free(character->gender);
+    free(character->hairColour);
+
+    free(character);
 }
