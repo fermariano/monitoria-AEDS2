@@ -1,9 +1,20 @@
+/** 
+ * Q02 - TP02 - AEDS II
+ * 
+ * @author Thomas Neuenschwander
+ * @since 26/04/2024
+ * 
+ * [GitHub](https://github.com/thomneuenschwander)
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <stdbool.h>
+#include <string.h>
 
-#define INITIAL_STRING_CAPACITY 256
+#define FILE_PATH ""
+
+#define INITIAL_STRING_CAPACITY 32
 #define INITIAL_ARRAY_CAPACITY 5
 
 typedef struct {
@@ -29,8 +40,8 @@ typedef struct {
     bool isWizard;
 } Character;
 
-void free_string_array(char** array, int length);
-void free_character(Character* character);
+void free_string_array(char **array, int length);
+void free_character(Character *character);
 
 char *read_string(int *i, const char *csvLine) {
     int maxSize = strlen(csvLine);
@@ -69,6 +80,7 @@ char **read_multivalued(int *i, const char *csvLine, int *arrayCount) {
     int maxSize = strlen(csvLine);
     if (*i >= maxSize-1 || csvLine[*i] != '[') 
         return NULL;
+
     (*i)++; // jump '['
 
     int arrayCapacity = INITIAL_ARRAY_CAPACITY;
@@ -151,7 +163,7 @@ int read_integer(int *i, const char *csvLine){
     return atoi(wordRead);
 }
 
-Character* csvLine_mapper(char* csvLine) {
+Character* csvLine_mapper(char *csvLine) {
     Character* character = (Character*)malloc(sizeof(Character));
     if (character == NULL) {
         perror("Memory allocation error in Character struct");
@@ -190,7 +202,7 @@ Character* csvLine_mapper(char* csvLine) {
     return character; 
 }
 
-void print_string_array(char** array, int count) {
+void print_string_array(char **array, int count) {
     printf("{");
     for (int i = 0; i < count; i++) {
         printf("%s", array[i]);
@@ -201,7 +213,7 @@ void print_string_array(char** array, int count) {
     printf("}");
 }
 
-void print_character(Character* character) {
+void print_character(Character *character) {
     if (character == NULL) {
         printf("Character struct is NULL.\n");
         return;
@@ -212,11 +224,10 @@ void print_character(Character* character) {
     printf(" ## %s", character->name ? character->name : " ");
 
     printf(" ## ");
-    if (character->alternateNames) {
+    if (character->alternateNames) 
         print_string_array(character->alternateNames, character->alternateNamesCount);
-    } else {
+    else 
         printf(" {}");
-    }
 
     printf(" ## %s", character->house ? character->house : " "); 
     printf(" ## %s", character->ancestry ? character->ancestry : " "); 
@@ -236,13 +247,8 @@ void print_character(Character* character) {
     printf("]\n");
 }
 
-
-
-
-
-
 int main(){
-    FILE *file = fopen("C:\\Users\\thomn\\OneDrive\\Desktop\\monitoria-AEDS2\\exercicios\\tp02\\characters.csv", "r");  
+    FILE *file = fopen(FILE_PATH, "r");  
     if (file == NULL) { 
         perror("File not found exception.");
         return 1;
@@ -260,7 +266,7 @@ int main(){
     return 0;
 }
 
-void free_string_array(char** array, int length) {
+void free_string_array(char **array, int length) {
     if (array == NULL)
         return;
 
@@ -269,7 +275,7 @@ void free_string_array(char** array, int length) {
     free(array);
 }
 
-void free_character(Character* character) {
+void free_character(Character *character) {
     if (character == NULL)
         return;
 
