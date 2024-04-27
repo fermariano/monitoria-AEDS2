@@ -89,7 +89,7 @@ public class AlgebraBool {
                 // Conta o número de dígitos dentro dos parênteses até o fim dos parênteses
                 while (frase.charAt(currentIndex) != ')') {
                     char c = frase.charAt(currentIndex);
-                    if (Character.isDigit(c)) {
+                    if (Personagem.isDigit(c)) {
                         count++;
                         if (c == '1') {
                             positivo++;
@@ -125,7 +125,7 @@ public class AlgebraBool {
                 // Conta o número de dígitos dentro dos parênteses
                 while (frase.charAt(index) != ')') {
                     char c = frase.charAt(index);
-                    if (Character.isDigit(c)) {
+                    if (Personagem.isDigit(c)) {
                         count++;
                         newFrase.append(c == '1' ? '0' : '1'); // Troca as entradas invertendo-as
                     }
@@ -158,7 +158,7 @@ public class AlgebraBool {
                 // Conta o número de dígitos dentro dos parênteses
                 while (frase.charAt(currentIndex) != ')') {
                     char c = frase.charAt(currentIndex);
-                    if (Character.isDigit(c)) {
+                    if (Personagem.isDigit(c)) {
                         count++;
                         if (c == '1') {
                             positivo++;
@@ -273,11 +273,11 @@ public class AlgebraBool {
     
     // Método para limpar um caractere
     static boolean clear(char c) {
-        return Character.isDigit(c) || c == ' ' || c == ',' || c == '.';
+        return Personagem.isDigit(c) || c == ' ' || c == ',' || c == '.';
     }
 
     // Método para verificar se é um número
     static boolean isnumber(char c) {
-        return Character.isDigit(c);
+        return Personagem.isDigit(c);
     }
 }
