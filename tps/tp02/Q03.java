@@ -36,7 +36,7 @@ public class Q03 {
    */
   static boolean sequentialSearch(List<Character> characters, String name) {
     Optional<Character> characterFound = characters.stream().filter(c -> c.getName().equals(name)).findFirst();
-    return characterFound.isPresent() ? true : false;
+    return characterFound.isPresent();
   }
 
   public static void main(String[] args) {
