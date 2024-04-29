@@ -12,7 +12,7 @@
 #include <stdbool.h>
 #include <string.h>
 
-#define FILE_PATH ""
+#define FILE_PATH "C:\\Users\\thomn\\Downloads\\characters.csv"
 
 #define INITIAL_STRING_CAPACITY 32
 #define INITIAL_ARRAY_CAPACITY 5
@@ -163,43 +163,104 @@ int read_integer(int *i, const char *csvLine){
     return atoi(wordRead);
 }
 
-Character* csvLine_mapper(char *csvLine) {
-    Character* character = (Character*)malloc(sizeof(Character));
-    if (character == NULL) {
-        perror("Memory allocation error in Character struct");
-        return NULL;
-    }
-
+Character csvLine_mapper(char *csvLine) {
+    Character character;
+    
     int i = 0;
 
-    character->id = read_string(&i, csvLine);
-    character->name = read_string(&i, csvLine);
+    character.id = read_string(&i, csvLine);
+    character.name = read_string(&i, csvLine);
 
     int alternateNamesCount = 0;
-    character->alternateNames = read_multivalued(&i, csvLine, &alternateNamesCount);
-    character->alternateNamesCount = alternateNamesCount;
+    character.alternateNames = read_multivalued(&i, csvLine, &alternateNamesCount);
+    character.alternateNamesCount = alternateNamesCount;
 
-    character->house = read_string(&i, csvLine);
-    character->ancestry = read_string(&i, csvLine);
-    character->species = read_string(&i, csvLine);
-    character->patronus = read_string(&i, csvLine);
-    character->isHogwartsStaff = read_boolean(&i, csvLine);
-    character->isHogwartsStudent = read_boolean(&i, csvLine);
-    character->actorName = read_string(&i, csvLine);
-    character->isAlive = read_boolean(&i, csvLine);
+    character.house = read_string(&i, csvLine);
+    character.ancestry = read_string(&i, csvLine);
+    character.species = read_string(&i, csvLine);
+    character.patronus = read_string(&i, csvLine);
+    character.isHogwartsStaff = read_boolean(&i, csvLine);
+    character.isHogwartsStudent = read_boolean(&i, csvLine);
+    character.actorName = read_string(&i, csvLine);
+    character.isAlive = read_boolean(&i, csvLine);
 
     int alternateActorsCount = 0;
-    character->alternateActors = read_multivalued(&i, csvLine, &alternateActorsCount);
-    character->alternateActorsCount = alternateActorsCount;
+    character.alternateActors = read_multivalued(&i, csvLine, &alternateActorsCount);
+    character.alternateActorsCount = alternateActorsCount;
 
-    character->dateOfBirth = read_string(&i, csvLine);
-    character->yearOfBirth = read_integer(&i, csvLine);
-    character->eyeColour = read_string(&i, csvLine);
-    character->gender = read_string(&i, csvLine);
-    character->hairColour = read_string(&i, csvLine);
-    character->isWizard = read_boolean(&i, csvLine);
+    character.dateOfBirth = read_string(&i, csvLine);
+    character.yearOfBirth = read_integer(&i, csvLine);
+    character.eyeColour = read_string(&i, csvLine);
+    character.gender = read_string(&i, csvLine);
+    character.hairColour = read_string(&i, csvLine);
+    character.isWizard = read_boolean(&i, csvLine);
 
     return character; 
+}
+
+void print_string_array(char **array, int count);
+
+void print_character(Character character);
+
+void print_all_characters(Character *arrayCharacters, int length);
+
+int main(){
+    FILE *file = fopen(FILE_PATH, "r");  
+    if (file == NULL) { 
+        perror("File not found exception.");
+        return 1;
+    }
+    int i = 0;
+    Character * allCharacters = (Character *)malloc(404 * sizeof(Character));
+    if (allCharacters == NULL) {
+        perror("Memory allocation error for characters array");
+        return 1;
+    }
+
+    char line[256];
+    fgets(line, sizeof(line), file);
+    while (fgets(line, sizeof(line), file)) 
+        allCharacters[i++] = csvLine_mapper(line); 
+    
+    print_all_characters(allCharacters, i);
+    
+
+    fclose(file);
+    return 0;
+}
+
+void print_all_characters(Character *arrayCharacters, int length){
+    for(int i = 0; i < length; i++)
+        print_character(arrayCharacters[i]);
+}
+
+void print_character(Character character){
+    printf("[");
+    printf("%s", character.id ? character.id : " "); 
+    printf(" ## %s", character.name ? character.name : " ");
+
+    printf(" ## ");
+    if (character.alternateNames) 
+        print_string_array(character.alternateNames, character.alternateNamesCount);
+    else 
+        printf(" {}");
+
+    printf(" ## %s", character.house ? character.house : " "); 
+    printf(" ## %s", character.ancestry ? character.ancestry : " "); 
+    printf(" ## %s", character.species ? character.species : " "); 
+    printf(" ## %s", character.patronus ? character.patronus : " "); 
+    printf(" ## %s", character.isHogwartsStaff ? "true" : "false"); 
+    printf(" ## %s", character.isHogwartsStudent ? "true" : "false"); 
+    printf(" ## %s", character.actorName ? character.actorName : " ");
+    printf(" ## %s", character.isAlive ? "true" : "false"); 
+    printf(" ## %s", character.dateOfBirth ? character.dateOfBirth : " "); 
+    printf(" ## %d", character.yearOfBirth); 
+    printf(" ## %s", character.eyeColour ? character.eyeColour : " ");
+    printf(" ## %s", character.gender ? character.gender : " ");
+    printf(" ## %s", character.hairColour ? character.hairColour : " "); 
+    printf(" ## %s", character.isWizard ? "true" : "false");
+
+    printf("]\n");
 }
 
 void print_string_array(char **array, int count) {
@@ -211,59 +272,6 @@ void print_string_array(char **array, int count) {
         }
     }
     printf("}");
-}
-
-void print_character(Character *character) {
-    if (character == NULL) {
-        printf("Character struct is NULL.\n");
-        return;
-    }
-
-    printf("[");
-    printf("%s", character->id ? character->id : " "); 
-    printf(" ## %s", character->name ? character->name : " ");
-
-    printf(" ## ");
-    if (character->alternateNames) 
-        print_string_array(character->alternateNames, character->alternateNamesCount);
-    else 
-        printf(" {}");
-
-    printf(" ## %s", character->house ? character->house : " "); 
-    printf(" ## %s", character->ancestry ? character->ancestry : " "); 
-    printf(" ## %s", character->species ? character->species : " "); 
-    printf(" ## %s", character->patronus ? character->patronus : " "); 
-    printf(" ## %s", character->isHogwartsStaff ? "true" : "false"); 
-    printf(" ## %s", character->isHogwartsStudent ? "true" : "false"); 
-    printf(" ## %s", character->actorName ? character->actorName : " ");
-    printf(" ## %s", character->isAlive ? "true" : "false"); 
-    printf(" ## %s", character->dateOfBirth ? character->dateOfBirth : " "); 
-    printf(" ## %d", character->yearOfBirth); 
-    printf(" ## %s", character->eyeColour ? character->eyeColour : " ");
-    printf(" ## %s", character->gender ? character->gender : " ");
-    printf(" ## %s", character->hairColour ? character->hairColour : " "); 
-    printf(" ## %s", character->isWizard ? "true" : "false");
-
-    printf("]\n");
-}
-
-int main(){
-    FILE *file = fopen(FILE_PATH, "r");  
-    if (file == NULL) { 
-        perror("File not found exception.");
-        return 1;
-    }
-
-    char line[256];
-    fgets(line, sizeof(line), file);
-    while (fgets(line, sizeof(line), file)) { 
-        print_character(csvLine_mapper(line));
-    }
-
-    fclose(file);
-
-
-    return 0;
 }
 
 void free_string_array(char **array, int length) {
