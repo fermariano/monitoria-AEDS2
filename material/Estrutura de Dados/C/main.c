@@ -1,18 +1,19 @@
-#include "FILA.h"
+#include "PILHA.h"
 #include <stdio.h>
 
-
-
-
 int main(){
-    Fila * myQueue = CriarFila();
-    myQueue->inserir(myQueue, 1);
-    myQueue->inserir(myQueue, 2);
-    myQueue->inserir(myQueue, 3);
+    
+    Pilha *pilha = CriarPilha();
+    pilha->push(pilha, 10);
+    pilha->push(pilha, 20);
+    pilha->push(pilha, 30);
 
-    myQueue->remover(myQueue);
-    printf("Tamanho da fila: %d\n", myQueue->size);
 
+    Node * temp = pilha->top;
+    while (temp != NULL) {
+        printf("%d\n", temp->data);
+        temp = temp->next;
+    }
 
 
     return 0;
