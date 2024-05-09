@@ -1,3 +1,4 @@
+package algorithms;
 /** 
  * Turtle and Hare - AEDS II
  * 
