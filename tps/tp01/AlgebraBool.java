@@ -273,11 +273,11 @@ public class AlgebraBool {
     
     // Método para limpar um caractere
     static boolean clear(char c) {
-        return Personagem.isDigit(c) || c == ' ' || c == ',' || c == '.';
+        return Character.isDigit(c) || c == ' ' || c == ',' || c == '.';
     }
-
+    
     // Método para verificar se é um número
-    static boolean isnumber(char c) {
-        return Personagem.isDigit(c);
+    static boolean isNumber(char c) {
+        return Character.isDigit(c);
     }
 }
