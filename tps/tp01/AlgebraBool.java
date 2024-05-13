@@ -89,7 +89,7 @@ public class AlgebraBool {
                 // Conta o número de dígitos dentro dos parênteses até o fim dos parênteses
                 while (frase.charAt(currentIndex) != ')') {
                     char c = frase.charAt(currentIndex);
-                    if (Personagem.isDigit(c)) {
+                    if (Character.isDigit(c)) {
                         count++;
                         if (c == '1') {
                             positivo++;
@@ -125,7 +125,7 @@ public class AlgebraBool {
                 // Conta o número de dígitos dentro dos parênteses
                 while (frase.charAt(index) != ')') {
                     char c = frase.charAt(index);
-                    if (Personagem.isDigit(c)) {
+                    if (Character.isDigit(c)) {
                         count++;
                         newFrase.append(c == '1' ? '0' : '1'); // Troca as entradas invertendo-as
                     }
@@ -158,7 +158,7 @@ public class AlgebraBool {
                 // Conta o número de dígitos dentro dos parênteses
                 while (frase.charAt(currentIndex) != ')') {
                     char c = frase.charAt(currentIndex);
-                    if (Personagem.isDigit(c)) {
+                    if (Character.isDigit(c)) {
                         count++;
                         if (c == '1') {
                             positivo++;
