@@ -1,4 +1,4 @@
-package algorithms.tads.list;
+package tps.tp03.tads;
 
 public class Node<T> {
     protected T data;        

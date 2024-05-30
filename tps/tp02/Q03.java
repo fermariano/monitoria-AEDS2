@@ -1,8 +1,13 @@
+package tps.tp02;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.function.Consumer;
+
+import tps.Personage;
+
 
 /**
  * Q03 - TP02 - AEDS II
@@ -34,19 +39,19 @@ public class Q03 {
    *             The complexity reflects the need to scan through the list to find
    *             a match.
    */
-  static boolean sequentialSearch(List<Character> characters, String name) {
-    Optional<Character> characterFound = characters.stream().filter(c -> c.getName().equals(name)).findFirst();
+  static boolean sequentialSearch(List<Personage> characters, String name) {
+    Optional<Personage> characterFound = characters.stream().filter(c -> c.getName().equals(name)).findFirst();
     return characterFound.isPresent();
   }
 
   public static void main(String[] args) {
-    var allCharacters = Character.readCSV(path);
+    var allCharacters = Personage.readCSV(path);
 
     Scanner sc = new Scanner(System.in);
-    List<Character> selectedCharacters = new ArrayList<>();
+    List<Personage> selectedCharacters = new ArrayList<>();
 
     processInput(sc, id -> {
-      var character = Character.findById(allCharacters, id);
+      var character = Personage.findById(allCharacters, id);
       if (character.isPresent())
         selectedCharacters.add(character.get());
     });

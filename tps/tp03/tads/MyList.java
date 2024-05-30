@@ -1,4 +1,13 @@
-package algorithms.tads.list;
+package tps.tp03.tads;
+
+/** 
+ * MyList - AEDS II
+ * 
+ * @author Thomas Neuenschwander
+ * @since 28/05/2024
+ * 
+ * [GitHub](https://github.com/thomneuenschwander)
+ */
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -6,11 +15,11 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
-public class LinkedList<T> implements List<T> {
+public class MyList<T> implements List<T> {
     private int size;
     private Node<T> head, tail;
 
-    public LinkedList() {
+    public MyList() {
         head = new Node<>();
         tail = head;
     }
@@ -32,57 +41,6 @@ public class LinkedList<T> implements List<T> {
                 return true;
         }
         return false;
-    }
-
-    @Override
-    public Iterator<T> iterator() {
-        return new Iterator<T>() {
-            private Node<T> current = head.next;
-
-            @Override
-            public boolean hasNext() {
-                return current != null;
-            }
-
-            @Override
-            public T next() {
-                if (current == null)
-                    throw new NoSuchElementException();
-
-                T data = current.data;
-                current = current.next;
-                return data;
-            }
-        };
-    }
-
-    @Override
-    public Object[] toArray() {
-        Object[] array = new Object[size];
-        int i = 0;
-        for (Node<T> j = head.next; j != null; j = j.next)
-            array[i++] = j.data;
-
-        return array;
-    }
-
-    @SuppressWarnings({ "unchecked", "hiding" })
-    @Override
-    public <T> T[] toArray(T[] a) {
-
-        if (a.length < size) 
-            a = (T[]) java.lang.reflect.Array.newInstance(a.getClass().getComponentType(), size);
-        
-
-        int i = 0;
-        Object[] result = a; 
-        for (Node<T> x = (Node<T>) head.next; x != null; x = x.next) 
-            result[i++] = x.data; 
-        
-        if (i < a.length) 
-            a[i] = null; 
-        
-        return a;
     }
 
     @Override
@@ -144,33 +102,29 @@ public class LinkedList<T> implements List<T> {
 
     @Override
     public boolean addAll(int index, Collection<? extends T> c) {
-        if (index < 0 || index > size()) {
+        if (index < 0 || index > size())
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size());
-        }
 
-        if (c.isEmpty()) {
+        if (c.isEmpty())
             return false;
-        }
 
         Node<T> currentNode = (index == size) ? null : findNode(index);
         Node<T> prevNode = (index == 0) ? head : currentNode.prev;
 
         for (T element : c) {
             Node<T> newNode = new Node<>(element, prevNode, null);
-            if (prevNode != null) {
+            if (prevNode != null)
                 prevNode.next = newNode;
-            } else {
+            else
                 head.next = newNode;
-            }
             prevNode = newNode;
         }
 
         if (currentNode != null) {
             prevNode.next = currentNode;
             currentNode.prev = prevNode;
-        } else {
-            tail = prevNode; // If currentNode is null, we are adding at the end
-        }
+        } else 
+            tail = prevNode; 
 
         size += c.size();
         return true;
@@ -187,25 +141,23 @@ public class LinkedList<T> implements List<T> {
                 removeNode(current);
                 current = next;
                 modified = true;
-            } else {
+            } else
                 current = current.next;
-            }
         }
 
         return modified;
     }
 
     private void removeNode(Node<T> node) {
-        if (node.prev != null) {
+        if (node.prev != null)
             node.prev.next = node.next;
-        } else {
+        else
             head.next = node.next;
-        }
-        if (node.next != null) {
+
+        if (node.next != null)
             node.next.prev = node.prev;
-        } else {
+        else
             tail = node.prev;
-        }
         size--;
     }
 
@@ -220,9 +172,8 @@ public class LinkedList<T> implements List<T> {
                 removeNode(current);
                 current = next;
                 modified = true;
-            } else {
+            } else
                 current = current.next;
-            }
         }
 
         return modified;
@@ -353,6 +304,70 @@ public class LinkedList<T> implements List<T> {
     }
 
     @Override
+    public List<T> subList(int fromIndex, int toIndex) {
+        if (fromIndex < 0 || toIndex > size || fromIndex > toIndex)
+            throw new IndexOutOfBoundsException("fromIndex: " + fromIndex + ", toIndex: " + toIndex);
+
+        MyList<T> subList = new MyList<>();
+        Node<T> startNode = findNode(fromIndex);
+        for (int i = fromIndex; i < toIndex; i++) {
+            subList.add(startNode.data);
+            startNode = startNode.next;
+        }
+        return subList;
+    }
+
+    @Override
+    public Object[] toArray() {
+        Object[] array = new Object[size];
+        int i = 0;
+        for (Node<T> j = head.next; j != null; j = j.next)
+            array[i++] = j.data;
+
+        return array;
+    }
+
+    @SuppressWarnings({ "unchecked", "hiding" })
+    @Override
+    public <T> T[] toArray(T[] a) {
+
+        if (a.length < size)
+            a = (T[]) java.lang.reflect.Array.newInstance(a.getClass().getComponentType(), size);
+
+        int i = 0;
+        Object[] result = a;
+        for (Node<T> x = (Node<T>) head.next; x != null; x = x.next)
+            result[i++] = x.data;
+
+        if (i < a.length)
+            a[i] = null;
+
+        return a;
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new Iterator<T>() {
+            private Node<T> current = head.next;
+
+            @Override
+            public boolean hasNext() {
+                return current != null;
+            }
+
+            @Override
+            public T next() {
+                if (current == null)
+                    throw new NoSuchElementException();
+
+                T data = current.data;
+                current = current.next;
+                return data;
+            }
+        };
+    }
+
+    @Override
     public ListIterator<T> listIterator() {
         return listIterator(0);
     }
@@ -458,28 +473,5 @@ public class LinkedList<T> implements List<T> {
                 size++;
             }
         };
-    }
-
-    @Override
-    public List<T> subList(int fromIndex, int toIndex) {
-        if (fromIndex < 0 || toIndex > size || fromIndex > toIndex)
-            throw new IndexOutOfBoundsException("fromIndex: " + fromIndex + ", toIndex: " + toIndex);
-
-        LinkedList<T> subList = new LinkedList<>();
-        Node<T> startNode = findNode(fromIndex);
-        for (int i = fromIndex; i < toIndex; i++) {
-            subList.add(startNode.data);
-            startNode = startNode.next;
-        }
-        return subList;
-    }
-    
-    public static void main(String[] args) {
-        List<Integer> list = new LinkedList<>();
-        list.add(2);
-        list.add(10);
-        list.add(4);
-
-        list.stream().forEach(System.out::println);
     }
 }

@@ -1,3 +1,5 @@
+package tps;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -7,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-class Character implements Cloneable, Comparable<Character> {
+public class Personage implements Cloneable, Comparable<Personage> {
     private String id;
     private String name;
     private List<String> alternateNames;
@@ -27,12 +29,12 @@ class Character implements Cloneable, Comparable<Character> {
     private String hairColour;
     private boolean wizard;
 
-    public Character() {
+    public Personage() {
         this.alternateNames = new ArrayList<>();
         this.alternateActors = new ArrayList<>();
     }
 
-    public Character(String id, String name, List<String> alternateNames, String house, String ancestry, String species,
+    public Personage(String id, String name, List<String> alternateNames, String house, String ancestry, String species,
             String patronus, boolean hogwartsStaff, boolean hogwartsStudent, String actorName, boolean alive,
             List<String> alternateActors, LocalDate dateOfBirth, int yearOfBirth, String eyeColour, String gender,
             String hairColour, boolean wizard) {
@@ -56,12 +58,12 @@ class Character implements Cloneable, Comparable<Character> {
         this.wizard = wizard;
     }
 
-    public static Optional<Character> findById(List<Character> characters, String id) {
+    public static Optional<Personage> findById(List<Personage> characters, String id) {
         return characters.stream().filter(c -> c.getName().equals(id)).findFirst();
     }
 
-    public static List<Character> readCSV(String csvFilePath) {
-        List<Character> characters = new ArrayList<>();
+    public static List<Personage> readCSV(String csvFilePath) {
+        List<Personage> characters = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(csvFilePath))) {
             br.readLine();
             while (br.ready()) {
@@ -74,8 +76,8 @@ class Character implements Cloneable, Comparable<Character> {
         return characters;
     }
 
-    private static Character mapCSVLineToCharacter(String csvLine) {
-        var character = new Character();
+    private static Personage mapCSVLineToCharacter(String csvLine) {
+        var character = new Personage();
 
         String[] parts = csvLine.split(";");
 
@@ -158,7 +160,7 @@ class Character implements Cloneable, Comparable<Character> {
     }
 
     @Override
-    public int compareTo(Character o) {
+    public int compareTo(Personage o) {
         return this.getId().compareTo(o.getId());
     }
 
